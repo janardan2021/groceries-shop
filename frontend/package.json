@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "https://groceries-shop.onrender.com",
   "dependencies": {
     "@tanstack/react-query": "^5.13.4",
     "@testing-library/jest-dom": "^5.17.0",
