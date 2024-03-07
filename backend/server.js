@@ -19,9 +19,23 @@ import orderRoutes from './routes/orderRoutes.js'
 
 app.use(express.json({
     verify: (req, res, buf) => {
-        req.rawBody = buf
+        if (req.originalUrl === '/api/orders/webhook'){
+            req.rawBody = buf
+            req.sig = req.headers['stripe-signature']
+        }
       }
 }))
+// Use JSON parser for all non-webhook routes
+// app.use(
+//     (req, res ,next) => {
+//       if (req.originalUrl === '/api/orders/webhook') {
+//         next();
+//       } else {
+//         express.json();
+//       }
+//     }
+//   );
+
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 app.use(cors())

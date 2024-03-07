@@ -60,7 +60,7 @@ const getSessonUrl = async (order) => {
                                                     : `http://localhost:3000/order/${order._id}`
                                         
    })
-   console.log(session)
+  //  console.log(session)
    return {url: session.url }
    } catch (error) {
     return error
@@ -135,10 +135,15 @@ const getCheckoutSession = asyncHandler (async (req, res) => {
 // @route post /api/orders/webhook
 const getStripeEvent = asyncHandler (async (req, res) => {
   //  console.log(req.body)
+
   // Signature verification
   const payload = req.rawBody
-  const sig = req.headers['stripe-signature']
+  // const payload = JSON.stringify(req.body)
+  // const sig = req.headers['stripe-signature']
+  const sig = req.sig
   const endpointSecret= process.env.ENDPOINT_SECRET
+
+  
 
   let event;
   try {
@@ -155,9 +160,9 @@ const getStripeEvent = asyncHandler (async (req, res) => {
   if (event?.data?.object.object === 'checkout.session' 
      && event.data.object.status === 'complete'
      && event.data.object.payment_status === 'paid'){
-    console.log(event.data.object.payment_status)
+    // console.log(event.data.object.payment_status)
     const order = await Order.findById(JSON.parse(event.data.object.client_reference_id))
-    console.log(order)
+    // console.log(order)
     if (order) {
        order.isPaid = true
        order.paidAt = Date.now()

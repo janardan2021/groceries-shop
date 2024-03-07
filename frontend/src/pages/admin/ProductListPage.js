@@ -40,7 +40,7 @@ const ProductListPage = () => {
             }
         }
     }
-    if(productsData) console.log(productsData)
+    // if(productsData) console.log(productsData)
   return (
    
     <div className='shadow-md shadow-green-300 py-2 px-4'>
