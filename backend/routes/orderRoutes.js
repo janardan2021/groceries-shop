@@ -19,7 +19,7 @@ import {createOrder, getOrderById, getMyOrders,
 
  import { protect , admin} from '../middlewares/authenticate.js'
 
-router.route('/').post( protect, createOrder)
+router.route('/').post(protect, createOrder)
 router.route('/').get(protect, admin, getAllOrders)
 // router.route('/').post(protect, addOrderItems)
 router.route('/mine').get(protect, getMyOrders)

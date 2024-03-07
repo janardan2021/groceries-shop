@@ -41,9 +41,9 @@ app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 
-app.get('/', (req, res) => {
-    res.send('API is running.....')
-})
+// app.get('/', (req, res) => {
+//     res.send('API is running.....')
+// })
 
 if(process.env.NODE_ENV === 'production') {
     // Provide the static folder that has client side files

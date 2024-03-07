@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 const CheckoutSteps = ({step1, step2, step3}) => {
     const navigate=useNavigate()
     const location = useLocation()
-    console.log(location)
+    // console.log(location)
     function onClick() {
         navigate(`/login?redirect=${location.pathname}`)
     }
