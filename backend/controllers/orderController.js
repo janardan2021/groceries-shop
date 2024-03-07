@@ -60,7 +60,7 @@ const getSessonUrl = async (order) => {
                                                     : `http://localhost:3000/order/${order._id}`
                                         
    })
-  //  console.log(session)
+   console.log(session)
    return {url: session.url }
    } catch (error) {
     return error
@@ -83,7 +83,7 @@ const createOrder = asyncHandler(async (req,res) => {
      shippingPrice,
      totalPrice
    } = req.body
- console.log(req.body)
+//  console.log(req.body)
    if (orderItems && orderItems.length === 0) {
       res.status(400)
       throw new Error('No order items')
@@ -106,7 +106,7 @@ const createOrder = asyncHandler(async (req,res) => {
    const sessionUrl = await getSessonUrl(createdOrder)
    // console.log('--------URL--------------------',sessionUrl)
    if (sessionUrl?.url) {
-     
+     console.log(sessionUrl?.url)
      res.send(sessionUrl)
    }else {
      res.status(404)
