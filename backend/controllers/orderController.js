@@ -137,10 +137,10 @@ const getStripeEvent = asyncHandler (async (req, res) => {
   //  console.log(req.body)
 
   // Signature verification
-  const payload = req.rawBody
+  const payload = req.rawBody.toString()
   // const payload = JSON.stringify(req.body)
   // const sig = req.headers['stripe-signature']
-  const sig = req.sig
+  const sig = req.sig.toString()
   const endpointSecret= process.env.ENDPOINT_SECRET
 
   
@@ -152,7 +152,7 @@ const getStripeEvent = asyncHandler (async (req, res) => {
     //  console.log(event)
 
   } catch (err){
-     console.log(err.message)
+    //  console.log(err.message)
      res.status(400).json({success: false})
      return;
   }
