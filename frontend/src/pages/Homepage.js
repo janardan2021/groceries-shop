@@ -61,7 +61,7 @@ const {data, isLoading} = useProductsByCategory(filter)
             <div className=" text-rose-500 text-center py-10 bg-green-100 rounded-md">Sorry! We don't have any items in the selected category in stock.</div>
           )}
         {data && data.data.map((product) => (
-             <Col  key={product._id} xs={8} md={6} lg={4} xl={3} >
+             <Col  key={product._id} xs={10} md={6} lg={4} xl={3} >
                        <Product product={product} />
               </Col>   
           ))}

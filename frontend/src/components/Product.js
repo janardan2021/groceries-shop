@@ -20,7 +20,7 @@ const Product = ({product}) => {
     // console.log('product', product)
   return (
     <Card className='rounded-md shadow-md hover:shadow-lg shadow-gray-200 bg-green-400 
-                     w-[280px] overflow-hidden my-2'>
+                      w-full sm:w-[280px] overflow-hidden my-2'>
         <Link to={`/product/${product._id}`} >
            <Card.Img src={`${product.image}`} variant='top' 
            className='h-[150px] hover:scale-x-105 transition ease-in-out '/>
