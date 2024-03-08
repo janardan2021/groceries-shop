@@ -136,14 +136,15 @@ const getCheckoutSession = asyncHandler (async (req, res) => {
 const getStripeEvent = asyncHandler (async (req, res) => {
   //  console.log(req.body)
 
-  // Signature verification
-  const payload = req.rawBody.toString()
-  // const payload = JSON.stringify(req.body)
-  // const sig = req.headers['stripe-signature']
-  const sig = req.sig.toString()
+  // Signature verificationcl
+  const payload = req.rawBody
+  console.log(payload)
+  console.log(req.headers)
+  const sig = req.headers['stripe-signature'].toString()
+  console.log('====value======',req.headers['stripe-signature'])
+  console.log('====string value======',req.headers['stripe-signature'].toString())
+  // const sig = req.sig.toString()
   const endpointSecret= process.env.ENDPOINT_SECRET
-
-  
 
   let event;
   try {
@@ -156,36 +157,52 @@ const getStripeEvent = asyncHandler (async (req, res) => {
      res.status(400).json({success: false})
      return;
   }
-  
-  if (event?.data?.object.object === 'checkout.session' 
-     && event.data.object.status === 'complete'
-     && event.data.object.payment_status === 'paid'){
-    // console.log(event.data.object.payment_status)
-    const order = await Order.findById(JSON.parse(event.data.object.client_reference_id))
-    // console.log(order)
-    if (order) {
-       order.isPaid = true
-       order.paidAt = Date.now()
-       order.paymentResult = {
-          id: event.data.object.payment_intent,
-          status: 'complete',
-          update_time:Date.now().toString() ,
-          email_address: event.data.object.customer_details.email
-       }
-       await order.save() 
-       }
-     }
+  // console.log('+++++++++++++++++++', event)
+  // if (event?.data?.object.object === 'checkout.session' 
+  //    && event.data.object.status === 'complete'
+  //    && event.data.object.payment_status === 'paid'){
+  //   // console.log(event.data.object.payment_status)
+  //   const order = await Order.findById(JSON.parse(event.data.object.client_reference_id))
+  //   // console.log(order)
+  //   if (order) {
+  //      order.isPaid = true
+  //      order.paidAt = Date.now()
+  //      order.paymentResult = {
+  //         id: event.data.object.payment_intent,
+  //         status: 'complete',
+  //         update_time:Date.now().toString() ,
+  //         email_address: event.data.object.customer_details.email
+  //      }
+  //      await order.save() 
+  //      }
+  //    }
 
     // Handle the event
-    // switch (event.type) {
-    //   case 'payment_intent.succeeded':
-    //     const paymentIntentSucceeded = event.data.object;
-    //     // Then define and call a function to handle the event payment_intent.succeeded
-    //     break;
-    //   // ... handle other event types
-    //   default:
-    //     console.log(`Unhandled event type ${event.type}`);
-    // }
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const checkoutSessionCompleted = event.data.object;
+        if(checkoutSessionCompleted.status === 'complete' && 
+          checkoutSessionCompleted.payment_status === 'paid'){
+            console.log('+++++++++++++++++++', event)
+            const order = await Order.findById(JSON.parse(checkoutSessionCompleted.client_reference_id))
+            // console.log(order)
+            if (order) {
+               order.isPaid = true
+               order.paidAt = Date.now()
+               order.paymentResult = {
+                  id: checkoutSessionCompleted.payment_intent,
+                  status: 'complete',
+                  update_time:Date.now().toString() ,
+                  email_address: checkoutSessionCompleted.customer_details.email
+               }
+               await order.save() 
+               }
+        }
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+    // Return a response to acknowledge receipt of the event
    res.json({success:true})
 })
 // @desc get logged in user's orders
