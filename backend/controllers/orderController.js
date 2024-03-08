@@ -138,12 +138,16 @@ const getStripeEvent = asyncHandler (async (req, res) => {
 
   // Signature verificationcl
   const payload = req.rawBody
-  console.log(payload)
-  console.log(req.headers)
+  // console.log(payload)
+  // console.log(req.headers)
+  // You don't have to do toString()
   const sig = req.headers['stripe-signature'].toString()
-  console.log('====value======',req.headers['stripe-signature'])
-  console.log('====string value======',req.headers['stripe-signature'].toString())
+  // console.log('====value======',req.headers['stripe-signature'])
+  // console.log('====string value======',req.headers['stripe-signature'].toString())
   // const sig = req.sig.toString()
+
+  // The webhook signing secret is named as ENDPOINT_SECRET
+  // You can also call it SIGNING_SECRET
   const endpointSecret= process.env.ENDPOINT_SECRET
 
   let event;
@@ -183,7 +187,7 @@ const getStripeEvent = asyncHandler (async (req, res) => {
         const checkoutSessionCompleted = event.data.object;
         if(checkoutSessionCompleted.status === 'complete' && 
           checkoutSessionCompleted.payment_status === 'paid'){
-            console.log('+++++++++++++++++++', event)
+            // console.log('+++++++++++++++++++', event)
             const order = await Order.findById(JSON.parse(checkoutSessionCompleted.client_reference_id))
             // console.log(order)
             if (order) {
@@ -200,7 +204,8 @@ const getStripeEvent = asyncHandler (async (req, res) => {
         }
         break;
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        // console.log(`Unhandled event type ${event.type}`);
+        break;
     }
     // Return a response to acknowledge receipt of the event
    res.json({success:true})
